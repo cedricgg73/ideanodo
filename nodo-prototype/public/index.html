@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zetha · Nodo</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<!-- ================= SIDEBAR (navegacion real del POS) ================= -->
+<aside class="sidebar">
+  <div class="marca">
+    <div class="marca-logo">Z</div>
+    <div>
+      <div class="marca-nombre">Prueba</div>
+      <div class="marca-tipo">Restaurante</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <p class="nav-seccion">Principal</p>
+    <button class="nav-item" data-vista="dashboard">Dashboard</button>
+
+    <p class="nav-seccion">Operacion</p>
+    <button class="nav-item" data-inerte>Restaurante</button>
+    <button class="nav-item" data-inerte>Caja</button>
+    <button class="nav-item" data-inerte>Ventas</button>
+    <button class="nav-item" data-inerte>Gastos</button>
+
+    <p class="nav-seccion">Analisis</p>
+    <button class="nav-item" data-inerte>Finanzas</button>
+    <button class="nav-item" data-inerte>Reportes</button>
+
+    <p class="nav-seccion">Gestion</p>
+    <button class="nav-item" data-vista="productos">Productos</button>
+    <button class="nav-item" data-inerte>Clientes</button>
+    <button class="nav-item" data-inerte>Proveedores</button>
+    <button class="nav-item" data-inerte>Compras</button>
+    <button class="nav-item" data-inerte>Facturacion</button>
+
+    <p class="nav-seccion">Herramientas</p>
+    <button class="nav-item" data-inerte>Monitor Cocina <span class="pill pill-live">Live</span></button>
+    <button class="nav-item" data-vista="automatizaciones">
+      Automatizaciones <span class="pill pill-nuevo">Nuevo</span>
+    </button>
+    <button class="nav-item" data-inerte>Configuracion</button>
+  </nav>
+
+  <div class="sidebar-pie">
+    <div class="marca-logo pequeno">P</div>
+    <div>
+      <div class="pie-nombre">prueba</div>
+      <div class="pie-rol">Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ================= CONTENIDO ================= -->
+<main class="contenido">
+  <header class="topbar">
+    <div id="topbar-titulo">
+      <h1>Dashboard</h1>
+      <p>Panel de control y metricas clave</p>
+    </div>
+    <div class="topbar-derecha">
+      <span class="chip-fecha">Lunes, 17 de agosto · 11:01 p. m.</span>
+      <span class="chip-estado">Servicio activo</span>
+    </div>
+  </header>
+
+  <!-- ---------- Vista: Dashboard ---------- -->
+  <section class="vista" id="vista-dashboard">
+    <div class="metricas">
+      <article class="metrica"><p class="metrica-label">Ingresos</p><p class="metrica-valor">$ 196.000</p></article>
+      <article class="metrica"><p class="metrica-label">Ganancia bruta</p><p class="metrica-valor">$ 196.000</p></article>
+      <article class="metrica"><p class="metrica-label">Gastos</p><p class="metrica-valor">$ 0</p></article>
+      <article class="metrica"><p class="metrica-label">Margen neto</p><p class="metrica-valor">100%</p></article>
+      <article class="metrica"><p class="metrica-label">Propinas</p><p class="metrica-valor">$ 2.800</p></article>
+      <article class="metrica destacada">
+        <p class="metrica-label">Alertas de stock</p><p class="metrica-valor">9</p>
+      </article>
+    </div>
+
+    <div class="rejilla-2">
+      <!-- Tarjeta de entrada a Nodo -->
+      <article class="tarjeta tarjeta-nodo">
+        <div class="nodo-mini" id="nodo-tarjeta"></div>
+        <p class="eyebrow">Nodo · La automatizacion</p>
+        <h2>Hay cosas que no deberias tener que recordar</h2>
+        <p class="texto">
+          Dime que te esta costando trabajo y te muestro las reglas que ya
+          tengo listas para eso. Tu eliges cual queda encendida.
+        </p>
+        <button class="boton-primario" data-abrir-nodo>Hablar con Nodo</button>
+      </article>
+
+      <!-- Alertas de inventario (datos del POS) -->
+      <article class="tarjeta">
+        <p class="eyebrow">Alertas de inventario</p>
+        <ul class="lista-alertas">
+          <li><span>Gaseosa 400ml</span><span class="badge badge-alerta">Stock 0</span></li>
+          <li><span>Limonada Natural</span><span class="badge badge-alerta">Stock 0</span></li>
+          <li><span>Jugo de Mora</span><span class="badge badge-alerta">Stock 0</span></li>
+          <li><span>Empanadas x3</span><span class="badge badge-alerta">Stock 0</span></li>
+          <li><span>Patacon con Hogao</span><span class="badge badge-alerta">Stock 0</span></li>
+        </ul>
+        <p class="nota-nodo">
+          Nodo puede avisarte antes de que lleguen a cero.
+          <button class="enlace" data-abrir-nodo data-frase="Ayudame con el stock">Ver como</button>
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ---------- Vista: Productos ---------- -->
+  <section class="vista oculta" id="vista-productos">
+    <div class="metricas cuatro">
+      <article class="metrica"><p class="metrica-label">Total productos</p><p class="metrica-valor">10</p></article>
+      <article class="metrica"><p class="metrica-label">Activos</p><p class="metrica-valor">10</p></article>
+      <article class="metrica"><p class="metrica-label">Stock bajo</p><p class="metrica-valor">9</p></article>
+      <article class="metrica destacada"><p class="metrica-label">Agotados</p><p class="metrica-valor">9</p></article>
+    </div>
+
+    <article class="tarjeta">
+      <div class="tarjeta-cabecera">
+        <p class="eyebrow">Catalogo de productos</p>
+        <button class="enlace" data-abrir-nodo data-frase="Ayudame con el stock">
+          Sugerido por Nodo: automatizar el stock
+        </button>
+      </div>
+      <table class="tabla">
+        <thead>
+          <tr><th>Producto</th><th>Categoria</th><th class="der">Precio</th><th class="der">Stock</th><th class="der">Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Bandeja Paisa</td><td>Platos fuertes</td><td class="der">$ 28.000</td><td class="der">30</td><td class="der"><span class="badge badge-ok">Activo</span></td></tr>
+          <tr><td>Empanadas x3</td><td>Entradas</td><td class="der">$ 9.000</td><td class="der cero">0</td><td class="der"><span class="badge badge-alerta">Agotado</span></td></tr>
+          <tr><td>Gaseosa 400ml</td><td>Bebidas</td><td class="der">$ 4.000</td><td class="der cero">0</td><td class="der"><span class="badge badge-alerta">Agotado</span></td></tr>
+          <tr><td>Jugo de Mora</td><td>Bebidas</td><td class="der">$ 5.500</td><td class="der cero">0</td><td class="der"><span class="badge badge-alerta">Agotado</span></td></tr>
+          <tr><td>Limonada Natural</td><td>Bebidas</td><td class="der">$ 5.000</td><td class="der cero">0</td><td class="der"><span class="badge badge-alerta">Agotado</span></td></tr>
+          <tr><td>Patacon con Hogao</td><td>Entradas</td><td class="der">$ 12.000</td><td class="der cero">0</td><td class="der"><span class="badge badge-alerta">Agotado</span></td></tr>
+          <tr><td>Pechuga a la Plancha</td><td>Platos fuertes</td><td class="der">$ 22.000</td><td class="der cero">0</td><td class="der"><span class="badge badge-alerta">Agotado</span></td></tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+
+  <!-- ---------- Vista: Automatizaciones (modulo nuevo) ---------- -->
+  <section class="vista oculta" id="vista-automatizaciones">
+    <article class="tarjeta">
+      <div class="tarjeta-cabecera">
+        <p class="eyebrow">Reglas activas</p>
+        <button class="boton-primario pequeno" data-abrir-nodo>Agregar con Nodo</button>
+      </div>
+      <div id="lista-activas"><p class="texto-vacio">Cargando…</p></div>
+    </article>
+
+    <article class="tarjeta">
+      <p class="eyebrow">Catalogo disponible</p>
+      <p class="texto" id="resumen-catalogo"></p>
+      <div class="chips" id="chips-catalogo"></div>
+    </article>
+  </section>
+</main>
+
+<!-- ================= WIDGET DE NODO ================= -->
+<button class="lanzador" id="lanzador" aria-label="Abrir Nodo">
+  <span class="lanzador-avatar" id="nodo-lanzador"></span>
+</button>
+
+<section class="panel" id="panel" aria-hidden="true">
+  <header class="panel-cabecera">
+    <div class="panel-avatar" id="nodo-panel"></div>
+    <div class="panel-id">
+      <p class="panel-nombre">Nodo</p>
+      <p class="panel-rol" id="panel-rol">La automatizacion</p>
+    </div>
+    <button class="panel-cerrar" id="cerrar" aria-label="Cerrar">×</button>
+  </header>
+
+  <div class="panel-cuerpo" id="cuerpo"></div>
+
+  <form class="panel-entrada" id="formulario">
+    <input id="entrada" type="text" autocomplete="off"
+           placeholder="¿Con que necesitas ayuda?">
+    <button type="submit" aria-label="Enviar">→</button>
+  </form>
+</section>
+
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nodo",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "nodo-prototype", "run", "dev"],
+      "port": 3000
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "zetha-nodo-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prototipo del asistente de automatizaciones 'Nodo' para Zetha POS (restaurantes)",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "dev": "node --experimental-strip-types --experimental-sqlite --no-warnings src/server.ts",
+    "start": "node --experimental-strip-types --experimental-sqlite --no-warnings src/server.ts",
+    "test": "node --experimental-strip-types --experimental-sqlite --no-warnings --test test/matching.test.ts",
+    "reset": "node --experimental-strip-types --experimental-sqlite --no-warnings scripts/reset.ts"
+  }
+}
