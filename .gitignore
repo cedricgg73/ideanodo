@@ -1,3 +1,5 @@
 node_modules/
 db/*.sqlite
 db/*.sqlite-journal
+.vercel
+.env*

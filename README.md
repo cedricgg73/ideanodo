@@ -25,24 +25,20 @@ npm run reset # borra la base local y vuelve a sembrar el catalogo
 
 ## Subirlo a Vercel
 
-El proyecto ya esta configurado (`vercel.json`, `.vercelignore`, funcion en
-`api/`). Desde **esta carpeta**, el CLI pide login por navegador la primera
-vez y luego despliega:
+El proyecto vive en la **raiz del repo**, que es justo donde Vercel mira al
+importar. No hay que configurar nada.
 
-```bash
-npx -y vercel deploy --prod
-```
+1. <https://vercel.com/new>
+2. Importar `cedricgg73/ideanodo`.
+3. **Dejar todos los ajustes como vienen.** Framework: Other. Root
+   Directory: `./`. Build y Install vacios (`vercel.json` ya los anula).
+4. Deploy.
 
-Responde a las preguntas del CLI:
+> Si el proyecto estuviera en una subcarpeta habria que apuntar *Root
+> Directory* a ella. Estuvo asi y por eso salia 404: Vercel desplegaba la
+> raiz, donde no habia ni `index.html` ni `api/`.
 
-- *Set up and deploy?* → **Y**
-- *Which scope?* → tu cuenta
-- *Link to existing project?* → **N**
-- *Project name?* → `zetha-nodo`
-- *In which directory is your code located?* → `./`
-- *Want to modify these settings?* → **N** (ya estan en `vercel.json`)
-
-Al terminar imprime la URL de produccion.
+Cada `git push` a `main` vuelve a desplegar solo.
 
 ### Diferencia entre local y Vercel
 

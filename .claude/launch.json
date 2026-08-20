@@ -4,7 +4,7 @@
     {
       "name": "nodo",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "nodo-prototype", "run", "dev"],
+      "runtimeArgs": ["run", "dev"],
       "port": 3000
     }
   ]
