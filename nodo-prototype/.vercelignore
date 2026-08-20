@@ -1,0 +1,9 @@
+# La base local del prototipo: en Vercel se usa el store en memoria.
+db/*.sqlite
+db/*.sqlite-journal
+
+# No se ejecutan en el despliegue.
+test/
+scripts/
+node_modules/
+.claude/

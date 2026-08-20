@@ -15,7 +15,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { CATALOGO, AGENTE_NODO } from '../db/seed.ts';
+import { CATALOGO, AGENTE_NODO, AGENTE_ORA } from '../db/seed.ts';
 import type {
   Agente,
   Intencion,
@@ -49,11 +49,16 @@ export function sembrarSiHaceFalta(): { sembrado: boolean; reglas: number } {
     return { sembrado: false, reglas: total.n };
   }
 
-  const agenteId = randomUUID();
-  db.prepare(
+  const insAgente = db.prepare(
     `insert into agentes (id, slug, nombre, rol, descripcion, personalidad, micro_gesto)
      values (?, ?, ?, ?, ?, ?, ?)`,
-  ).run(
+  );
+
+  // Los dos personajes FUNCIONALES del modulo: Nodo automatiza, Ora
+  // responde. El resto del elenco (Tico, Sello, Bodo, Zeta) es branding
+  // de otras areas y no vive en esta tabla.
+  const agenteId = randomUUID(); // Nodo: es el duenio de las intenciones
+  insAgente.run(
     agenteId,
     AGENTE_NODO.slug,
     AGENTE_NODO.nombre,
@@ -61,6 +66,15 @@ export function sembrarSiHaceFalta(): { sembrado: boolean; reglas: number } {
     AGENTE_NODO.descripcion,
     AGENTE_NODO.personalidad,
     AGENTE_NODO.microGesto,
+  );
+  insAgente.run(
+    randomUUID(),
+    AGENTE_ORA.slug,
+    AGENTE_ORA.nombre,
+    AGENTE_ORA.rol,
+    AGENTE_ORA.descripcion,
+    AGENTE_ORA.personalidad,
+    AGENTE_ORA.microGesto,
   );
 
   const insIntencion = db.prepare(
@@ -155,8 +169,8 @@ function aAutomatizacion(f: FilaAutomatizacion): Automatizacion {
   };
 }
 
-export function obtenerAgenteNodo(): Agente {
-  const f = db.prepare('select * from agentes where slug = ?').get('nodo') as {
+function obtenerAgente(slug: string): Agente {
+  const f = db.prepare('select * from agentes where slug = ?').get(slug) as {
     id: string; slug: string; nombre: string; rol: string;
     descripcion: string; personalidad: string; micro_gesto: string; activo: number;
   };
@@ -171,6 +185,9 @@ export function obtenerAgenteNodo(): Agente {
     activo: f.activo === 1,
   };
 }
+
+export const obtenerAgenteNodo = () => obtenerAgente('nodo');
+export const obtenerAgenteOra = () => obtenerAgente('ora');
 
 export function listarIntenciones(): Intencion[] {
   const filas = db

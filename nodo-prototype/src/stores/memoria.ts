@@ -12,7 +12,7 @@
  * siempre y el cliente puede recordar lo que activo.
  */
 
-import { CATALOGO, AGENTE_NODO } from '../../db/seed.ts';
+import { CATALOGO, AGENTE_NODO, AGENTE_ORA } from '../../db/seed.ts';
 import type { Agente, Intencion, Automatizacion, ActivacionRegistrada } from '../types.ts';
 import type { Store, ActivacionDetallada } from '../store.ts';
 
@@ -24,6 +24,17 @@ const AGENTE: Agente = {
   descripcion: AGENTE_NODO.descripcion,
   personalidad: AGENTE_NODO.personalidad,
   microGesto: AGENTE_NODO.microGesto,
+  activo: true,
+};
+
+const ORA: Agente = {
+  id: AGENTE_ORA.slug,
+  slug: AGENTE_ORA.slug,
+  nombre: AGENTE_ORA.nombre,
+  rol: AGENTE_ORA.rol,
+  descripcion: AGENTE_ORA.descripcion,
+  personalidad: AGENTE_ORA.personalidad,
+  microGesto: AGENTE_ORA.microGesto,
   activo: true,
 };
 
@@ -62,6 +73,8 @@ export const storeMemoria: Store = {
   persistente: false,
 
   obtenerAgenteNodo: () => AGENTE,
+
+  obtenerAgenteOra: () => ORA,
 
   listarIntenciones: () => INTENCIONES,
 

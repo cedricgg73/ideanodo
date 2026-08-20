@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "node --experimental-strip-types --experimental-sqlite --no-warnings src/server.ts",
     "start": "node --experimental-strip-types --experimental-sqlite --no-warnings src/server.ts",
-    "test": "node --experimental-strip-types --experimental-sqlite --no-warnings --test test/matching.test.ts",
+    "test": "node --experimental-strip-types --experimental-sqlite --no-warnings --test test/matching.test.ts test/ora.test.ts",
     "reset": "node --experimental-strip-types --experimental-sqlite --no-warnings scripts/reset.ts"
   }
 }

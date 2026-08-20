@@ -13,6 +13,7 @@ export const storeSqlite: Store = {
   persistente: true,
 
   obtenerAgenteNodo: base.obtenerAgenteNodo,
+  obtenerAgenteOra: base.obtenerAgenteOra,
   listarIntenciones: base.listarIntenciones,
   listarAutomatizacionesDe: base.listarAutomatizacionesDe,
   obtenerAutomatizacion: base.obtenerAutomatizacion,

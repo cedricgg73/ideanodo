@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zetha · Nodo</title>
+<title>Zetha · Nodo y Ora</title>
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -72,45 +72,35 @@
   <!-- ---------- Vista: Dashboard ---------- -->
   <section class="vista" id="vista-dashboard">
     <div class="metricas">
-      <article class="metrica"><p class="metrica-label">Ingresos</p><p class="metrica-valor">$ 196.000</p></article>
-      <article class="metrica"><p class="metrica-label">Ganancia bruta</p><p class="metrica-valor">$ 196.000</p></article>
-      <article class="metrica"><p class="metrica-label">Gastos</p><p class="metrica-valor">$ 0</p></article>
-      <article class="metrica"><p class="metrica-label">Margen neto</p><p class="metrica-valor">100%</p></article>
+      <article class="metrica"><p class="metrica-label">Ingresos</p><p class="metrica-valor">$ 276.000</p></article>
+      <article class="metrica"><p class="metrica-label">Ganancia bruta</p><p class="metrica-valor">$ 159.900</p></article>
+      <article class="metrica"><p class="metrica-label">Ticket promedio</p><p class="metrica-valor">$ 23.000</p></article>
+      <article class="metrica"><p class="metrica-label">Margen bruto</p><p class="metrica-valor">57,9%</p></article>
       <article class="metrica"><p class="metrica-label">Propinas</p><p class="metrica-valor">$ 2.800</p></article>
       <article class="metrica destacada">
         <p class="metrica-label">Alertas de stock</p><p class="metrica-valor">9</p>
       </article>
     </div>
 
-    <div class="rejilla-2">
-      <!-- Tarjeta de entrada a Nodo -->
-      <article class="tarjeta tarjeta-nodo">
-        <div class="nodo-mini" id="nodo-tarjeta"></div>
-        <p class="eyebrow">Nodo · La automatizacion</p>
-        <h2>Hay cosas que no deberias tener que recordar</h2>
-        <p class="texto">
-          Dime que te esta costando trabajo y te muestro las reglas que ya
-          tengo listas para eso. Tu eliges cual queda encendida.
-        </p>
-        <button class="boton-primario" data-abrir-nodo>Hablar con Nodo</button>
-      </article>
+    <!-- Una tarjeta por personaje. Se generan desde /api/catalogo. -->
+    <div class="rejilla-2" id="tarjetas-agentes"></div>
 
-      <!-- Alertas de inventario (datos del POS) -->
-      <article class="tarjeta">
-        <p class="eyebrow">Alertas de inventario</p>
-        <ul class="lista-alertas">
-          <li><span>Gaseosa 400ml</span><span class="badge badge-alerta">Stock 0</span></li>
-          <li><span>Limonada Natural</span><span class="badge badge-alerta">Stock 0</span></li>
-          <li><span>Jugo de Mora</span><span class="badge badge-alerta">Stock 0</span></li>
-          <li><span>Empanadas x3</span><span class="badge badge-alerta">Stock 0</span></li>
-          <li><span>Patacon con Hogao</span><span class="badge badge-alerta">Stock 0</span></li>
-        </ul>
-        <p class="nota-nodo">
-          Nodo puede avisarte antes de que lleguen a cero.
-          <button class="enlace" data-abrir-nodo data-frase="Ayudame con el stock">Ver como</button>
-        </p>
-      </article>
-    </div>
+    <article class="tarjeta">
+      <p class="eyebrow">Alertas de inventario</p>
+      <ul class="lista-alertas">
+        <li><span>Gaseosa 400ml</span><span class="badge badge-alerta">Stock 0</span></li>
+        <li><span>Limonada Natural</span><span class="badge badge-alerta">Stock 0</span></li>
+        <li><span>Jugo de Mora</span><span class="badge badge-alerta">Stock 0</span></li>
+        <li><span>Empanadas x3</span><span class="badge badge-alerta">Stock 0</span></li>
+        <li><span>Patacon con Hogao</span><span class="badge badge-alerta">Stock 0</span></li>
+      </ul>
+      <p class="nota-nodo">
+        Nodo puede avisarte antes de que lleguen a cero.
+        <button class="enlace" data-abrir="nodo" data-frase="Ayudame con el stock">Ver como</button>
+        &nbsp;·&nbsp; Ora te dice cual se vende mas.
+        <button class="enlace" data-abrir="ora" data-frase="¿Cual es mi producto mas vendido?">Preguntarle</button>
+      </p>
+    </article>
   </section>
 
   <!-- ---------- Vista: Productos ---------- -->
@@ -125,9 +115,14 @@
     <article class="tarjeta">
       <div class="tarjeta-cabecera">
         <p class="eyebrow">Catalogo de productos</p>
-        <button class="enlace" data-abrir-nodo data-frase="Ayudame con el stock">
-          Sugerido por Nodo: automatizar el stock
-        </button>
+        <div class="acciones-agente">
+          <button class="enlace" data-abrir="nodo" data-frase="Ayudame con el stock">
+            Nodo: automatizar el stock
+          </button>
+          <button class="enlace" data-abrir="ora" data-frase="¿Cual de mis platos deja mas ganancia?">
+            Ora: cual deja mas
+          </button>
+        </div>
       </div>
       <table class="tabla">
         <thead>
@@ -151,42 +146,21 @@
     <article class="tarjeta">
       <div class="tarjeta-cabecera">
         <p class="eyebrow">Reglas activas</p>
-        <button class="boton-primario pequeno" data-abrir-nodo>Agregar con Nodo</button>
+        <button class="boton-primario pequeno" data-abrir="nodo">Agregar con Nodo</button>
       </div>
       <div id="lista-activas"><p class="texto-vacio">Cargando…</p></div>
     </article>
 
     <article class="tarjeta">
-      <p class="eyebrow">Catalogo disponible</p>
+      <p class="eyebrow">Que sabe hacer cada uno</p>
       <p class="texto" id="resumen-catalogo"></p>
-      <div class="chips" id="chips-catalogo"></div>
+      <div id="catalogo-agentes"></div>
     </article>
   </section>
 </main>
 
-<!-- ================= WIDGET DE NODO ================= -->
-<button class="lanzador" id="lanzador" aria-label="Abrir Nodo">
-  <span class="lanzador-avatar" id="nodo-lanzador"></span>
-</button>
-
-<section class="panel" id="panel" aria-hidden="true">
-  <header class="panel-cabecera">
-    <div class="panel-avatar" id="nodo-panel"></div>
-    <div class="panel-id">
-      <p class="panel-nombre">Nodo</p>
-      <p class="panel-rol" id="panel-rol">La automatizacion</p>
-    </div>
-    <button class="panel-cerrar" id="cerrar" aria-label="Cerrar">×</button>
-  </header>
-
-  <div class="panel-cuerpo" id="cuerpo"></div>
-
-  <form class="panel-entrada" id="formulario">
-    <input id="entrada" type="text" autocomplete="off"
-           placeholder="¿Con que necesitas ayuda?">
-    <button type="submit" aria-label="Enviar">→</button>
-  </form>
-</section>
+<!-- Un boton por personaje. El dock se genera desde el catalogo. -->
+<div class="dock" id="dock"></div>
 
 <script src="/app.js"></script>
 </body>

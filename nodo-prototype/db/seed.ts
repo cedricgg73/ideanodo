@@ -14,7 +14,14 @@
  * Nunca se ejecuta codigo arbitrario que venga de la base.
  */
 
-/** El unico personaje funcional de este modulo. Ver nota en db/schema.sql. */
+/**
+ * Personajes FUNCIONALES: los que ejecutan un flujo, no los decorativos.
+ * Tico, Sello, Bodo y Zeta son mascotas de otras areas del producto
+ * (soporte, facturacion, inventario, onboarding) y no viven aqui.
+ *
+ * Nodo automatiza. Ora responde preguntas de datos. El clasificador
+ * (src/clasificador.ts) decide cual de los dos atiende cada frase.
+ */
 export const AGENTE_NODO = {
   slug: 'nodo',
   nombre: 'Nodo',
@@ -25,6 +32,18 @@ export const AGENTE_NODO = {
     'Confirma hechos, no promete resultados. Frases cortas. Nunca celebra de mas ni asusta. ' +
     'Si no entiende, lo dice de una vez y ofrece alternativas concretas.',
   microGesto: 'Los tres puntos del visor avanzan en secuencia.',
+} as const;
+
+export const AGENTE_ORA = {
+  slug: 'ora',
+  nombre: 'Ora',
+  rol: 'La analista',
+  descripcion:
+    'Seca, precisa, un punto sarcastica. Da la cifra antes que el consejo y no endulza un mal mes.',
+  personalidad:
+    'Empieza siempre por el numero. Una linea de contexto y se calla. ' +
+    'Si el dato es malo, lo dice igual. No recomienda salvo que se lo pidan.',
+  microGesto: 'Las barras del visor suben al cargar datos.',
 } as const;
 
 type AutomatizacionSemilla = {

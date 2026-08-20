@@ -1,9 +1,14 @@
 /**
- * SERVIDOR DEL PROTOTIPO
- * ======================
+ * SERVIDOR DEL PROTOTIPO (local)
+ * ==============================
  * Sin dependencias externas: node:http + node:sqlite.
- * En el POS real esto seria un router de Express/Fastify montado en
- * /api/nodo; la logica de las rutas (src/routes/nodo.ts) no cambia.
+ * En el POS real esto seria un router de Express/Fastify; la logica de
+ * las rutas (src/routes/agentes.ts) no cambia.
+ *
+ *   POST /api/chat          { agente, texto }
+ *   POST /api/activar       { automatizacionId }
+ *   GET  /api/activaciones
+ *   GET  /api/catalogo
  */
 
 import { createServer } from 'node:http';
@@ -17,7 +22,7 @@ import {
   manejarActivar,
   manejarActivaciones,
   manejarCatalogo,
-} from './routes/nodo.ts';
+} from './routes/agentes.ts';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PUBLICO = join(RAIZ, 'public');
@@ -32,12 +37,11 @@ const TIPOS: Record<string, string> = {
 };
 
 function json(res: import('node:http').ServerResponse, codigo: number, cuerpo: unknown): void {
-  const texto = JSON.stringify(cuerpo, null, 2);
   res.writeHead(codigo, {
     'content-type': 'application/json; charset=utf-8',
     'cache-control': 'no-store',
   });
-  res.end(texto);
+  res.end(JSON.stringify(cuerpo, null, 2));
 }
 
 async function leerCuerpo(req: import('node:http').IncomingMessage): Promise<unknown> {
@@ -57,25 +61,21 @@ const servidor = createServer(async (req, res) => {
   const ruta = url.pathname;
 
   try {
-    // ---------------- API ----------------
-    if (ruta === '/api/nodo/chat' && req.method === 'POST') {
-      const cuerpo = (await leerCuerpo(req)) as { texto?: unknown };
+    if (ruta === '/api/chat' && req.method === 'POST') {
+      const cuerpo = (await leerCuerpo(req)) as { agente?: unknown; texto?: unknown };
       const texto = typeof cuerpo.texto === 'string' ? cuerpo.texto.trim() : '';
-      if (!texto) {
-        return json(res, 400, { error: 'Falta el campo "texto".' });
-      }
-      return json(res, 200, manejarChat(store, texto));
+      const agente = cuerpo.agente === 'ora' ? 'ora' : 'nodo';
+      if (!texto) return json(res, 400, { error: 'Falta el campo "texto".' });
+      return json(res, 200, manejarChat(store, agente, texto));
     }
 
-    if (ruta === '/api/nodo/activar' && req.method === 'POST') {
+    if (ruta === '/api/activar' && req.method === 'POST') {
       const cuerpo = (await leerCuerpo(req)) as {
         automatizacionId?: unknown;
         parametros?: unknown;
       };
       const id = typeof cuerpo.automatizacionId === 'string' ? cuerpo.automatizacionId : '';
-      if (!id) {
-        return json(res, 400, { error: 'Falta el campo "automatizacionId".' });
-      }
+      if (!id) return json(res, 400, { error: 'Falta el campo "automatizacionId".' });
       const parametros =
         cuerpo.parametros && typeof cuerpo.parametros === 'object'
           ? (cuerpo.parametros as Record<string, unknown>)
@@ -84,11 +84,11 @@ const servidor = createServer(async (req, res) => {
       return json(res, resultado.ok ? 200 : 404, resultado);
     }
 
-    if (ruta === '/api/nodo/activaciones' && req.method === 'GET') {
+    if (ruta === '/api/activaciones' && req.method === 'GET') {
       return json(res, 200, manejarActivaciones(store));
     }
 
-    if (ruta === '/api/nodo/catalogo' && req.method === 'GET') {
+    if (ruta === '/api/catalogo' && req.method === 'GET') {
       return json(res, 200, manejarCatalogo(store));
     }
 
@@ -117,7 +117,7 @@ const servidor = createServer(async (req, res) => {
       res.end('No encontrado');
       return;
     }
-    console.error('[nodo] error:', err.message);
+    console.error('[zetha] error:', err.message);
     json(res, 500, { error: 'Error interno.' });
   }
 });
@@ -126,11 +126,10 @@ const { sembrado, reglas } = sembrarSiHaceFalta();
 
 servidor.listen(PUERTO, () => {
   console.log('');
-  console.log('  ZETHA · Prototipo del modulo de automatizaciones (Nodo)');
-  console.log('  ' + '-'.repeat(54));
-  console.log(`  Catalogo:  ${reglas} reglas preestablecidas ${sembrado ? '(recien sembradas)' : '(ya existian)'}`);
+  console.log('  ZETHA · Prototipo de personajes funcionales');
+  console.log('  ' + '-'.repeat(52));
+  console.log(`  Nodo:      ${reglas} reglas de automatizacion ${sembrado ? '(sembradas)' : '(ya existian)'}`);
+  console.log('  Ora:       9 consultas de datos');
   console.log(`  Servidor:  http://localhost:${PUERTO}`);
-  console.log('');
-  console.log('  Probar:    escribe "quiero controlar las perdidas de comida"');
   console.log('');
 });

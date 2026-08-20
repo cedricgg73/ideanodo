@@ -34,6 +34,7 @@ export type Store = {
   readonly persistente: boolean;
 
   obtenerAgenteNodo(): Agente;
+  obtenerAgenteOra(): Agente;
   listarIntenciones(): Intencion[];
   listarAutomatizacionesDe(intencionId: string): Automatizacion[];
   obtenerAutomatizacion(id: string): Automatizacion | null;

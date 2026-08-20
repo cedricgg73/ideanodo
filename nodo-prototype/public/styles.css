@@ -170,8 +170,6 @@ body {
 .texto { color: var(--gris-600); font-size: 13.5px; line-height: 1.6; }
 .texto-vacio { color: var(--gris-400); font-size: 13.5px; padding: 12px 0; }
 
-.tarjeta-nodo { background: linear-gradient(180deg, var(--azul-50), #fff 62%); }
-.nodo-mini { width: 62px; height: 72px; margin-bottom: 12px; }
 
 /* Listas y tablas */
 .lista-alertas { list-style: none; display: flex; flex-direction: column; gap: 1px; margin-top: 12px; }
@@ -242,11 +240,11 @@ body {
 .regla-codigo { font-family: var(--mono); font-size: 11px; color: var(--navy-estructura); }
 
 /* =====================================================================
-   NODO · avatar y estados del visor
+   AVATARES · estados del visor
    Toda la expresion ocurre DENTRO del visor y en la luz de estado.
    Sin cejas, sin boca, sin manos.
    ===================================================================== */
-.avatar-nodo { width: 100%; height: 100%; display: block; overflow: visible; }
+.avatar { width: 100%; height: 100%; display: block; overflow: visible; }
 
 .n-sombra  { fill: var(--zetha-navy); opacity: .08; }
 .n-antena  { stroke: var(--gris-400); stroke-width: 3.2; stroke-linecap: round; }
@@ -280,41 +278,69 @@ body {
 [data-estado="error"] .n-error { display: block; }
 [data-estado="error"] .n-luz   { fill: var(--alerta); }
 
-/* ---------------------------------------------------------------------
-   Lanzador y panel
-   --------------------------------------------------------------------- */
-.lanzador {
-  position: fixed; right: 26px; bottom: 26px; z-index: 40;
-  width: 58px; height: 58px; border-radius: 18px;
-  border: 0; background: var(--zetha-navy);
-  box-shadow: var(--sombra-alta); cursor: pointer;
-  display: grid; place-items: center;
-  transition: transform .15s;
+/* -- ORA: mismo cuerpo, visor de barras -- */
+.o-barra { fill: var(--azul-300); transition: fill .2s; transform-box: fill-box; transform-origin: bottom; }
+.luz-ora { fill: var(--gris-400); }
+
+/* micro-gesto de Ora: las barras suben al cargar datos */
+[data-estado="pensando"] .o-barra { animation: subir .9s infinite ease-in-out; }
+[data-estado="pensando"] .o-barra:nth-child(2) { animation-delay: .12s; }
+[data-estado="pensando"] .o-barra:nth-child(3) { animation-delay: .24s; }
+[data-estado="pensando"] .luz-ora { fill: var(--azul-300); }
+
+@keyframes subir {
+  0%, 100% { transform: scaleY(.55); opacity: .55; }
+  50%      { transform: scaleY(1);   opacity: 1; }
 }
-.lanzador:hover { transform: translateY(-2px); }
-.lanzador.oculto { display: none; }
-.lanzador-avatar { width: 36px; height: 42px; display: block; }
+
+[data-estado="hecho"] .o-barra { fill: var(--exito); }
+[data-estado="error"] .o-barra { display: none; }
+
+
+
+/* =====================================================================
+   DOCK Y PANELES POR PERSONAJE
+   ---------------------------------------------------------------------
+   Un boton y un panel por personaje. Nada esta atado a Nodo ni a Ora:
+   el tema se aplica por la clase .tema-<slug>, asi que sumar a Tico o a
+   Bodo es agregar sus variables y su entrada en el catalogo.
+   ===================================================================== */
+
+.dock {
+  position: fixed; right: 24px; bottom: 24px; z-index: 40;
+  display: flex; flex-direction: column; gap: 10px; align-items: flex-end;
+}
+.dock.oculto { display: none; }
+
+.dock-boton {
+  display: flex; align-items: center; gap: 9px;
+  border: 0; border-radius: 100px; cursor: pointer;
+  background: var(--zetha-navy); color: #fff;
+  padding: 7px 16px 7px 8px;
+  box-shadow: var(--sombra-alta);
+  font: inherit; font-size: 13px; font-weight: 560;
+  transition: transform .14s;
+}
+.dock-boton:hover { transform: translateY(-2px); }
+.dock-avatar { width: 30px; height: 35px; display: block; flex: none; }
 
 .panel {
-  position: fixed; right: 26px; bottom: 26px; z-index: 50;
-  width: 424px; max-width: calc(100vw - 32px);
-  max-height: min(720px, calc(100vh - 52px));
+  position: fixed; right: 24px; bottom: 24px; z-index: 50;
+  width: 430px; max-width: calc(100vw - 32px);
+  max-height: min(700px, calc(100vh - 48px));
   background: #fff; border: 1px solid var(--nube-200);
   border-radius: 18px; box-shadow: var(--sombra-alta);
   display: none; flex-direction: column; overflow: hidden;
 }
 .panel.abierto { display: flex; }
 
-.panel-cabecera {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px; background: var(--zetha-navy);
-}
-.panel-avatar { width: 38px; height: 44px; flex: none; }
+.panel-cabecera { display: flex; align-items: center; gap: 12px; padding: 13px 15px; }
+.panel-avatar { width: 36px; height: 42px; flex: none; }
 .panel-id { flex: 1; }
 .panel-nombre { color: #fff; font-weight: 640; font-size: 14.5px; }
 .panel-rol {
-  font-family: var(--mono); font-size: 9px; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--azul-300); margin-top: 2px;
+  font-family: var(--mono); font-size: 8.5px; letter-spacing: .12em;
+  text-transform: uppercase; margin-top: 2px;
 }
 .panel-cerrar {
   border: 0; background: none; color: var(--gris-400);
@@ -323,18 +349,26 @@ body {
 .panel-cerrar:hover { color: #fff; }
 
 .panel-cuerpo {
-  flex: 1; overflow-y: auto; padding: 18px 16px;
-  display: flex; flex-direction: column; gap: 12px;
+  flex: 1; overflow-y: auto; padding: 16px 15px;
+  display: flex; flex-direction: column; gap: 10px;
   background: var(--nube-50);
 }
 
+/* Tema por personaje: solo cambian cabecera y acento. */
+.tema-nodo .panel-cabecera { background: var(--zetha-navy); }
+.tema-nodo .panel-rol      { color: var(--azul-300); }
+.tema-ora  .panel-cabecera { background: var(--navy-estructura); }
+.tema-ora  .panel-rol      { color: var(--azul-300); }
+
 /* Burbujas */
-.burbuja { max-width: 88%; font-size: 13.5px; line-height: 1.55; }
-.burbuja-nodo {
+.burbuja { font-size: 13.5px; line-height: 1.55; max-width: 90%; }
+.burbuja-agente {
   align-self: flex-start; background: #fff; color: var(--zetha-navy);
   border: 1px solid var(--nube-200);
   border-radius: 13px 13px 13px 4px; padding: 11px 14px;
 }
+/* Ora habla en cifras: su primera linea es el dato, y se ve como tal. */
+.tema-ora .burbuja-agente { border-left: 3px solid var(--navy-estructura); font-weight: 520; }
 .burbuja-usuario {
   align-self: flex-end; background: var(--azul-zetha); color: #fff;
   border-radius: 13px 13px 4px 13px; padding: 11px 14px;
@@ -345,7 +379,44 @@ body {
   align-self: flex-start; padding-left: 3px;
 }
 
-/* Tarjetas de plantilla */
+/* Tabla de respaldo de Ora */
+.ora-filas {
+  background: #fff; border: 1px solid var(--nube-200);
+  border-radius: var(--radio); padding: 4px 14px;
+}
+.ora-fila {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 9px 0; font-size: 12.5px; color: var(--gris-600);
+  border-bottom: 1px solid var(--nube-200);
+}
+.ora-fila:last-child { border-bottom: 0; }
+.ora-valor { color: var(--zetha-navy); font-weight: 600; white-space: nowrap; }
+
+/* Derivacion: el puente entre personajes */
+.derivar {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; text-align: left; cursor: pointer;
+  border: 1px dashed var(--nube-200); border-radius: var(--radio);
+  background: #fff; padding: 9px 13px;
+  font: inherit; font-size: 13px; font-weight: 560; color: var(--zetha-navy);
+  transition: border-color .14s, background .14s;
+}
+.derivar:hover { border-style: solid; border-color: var(--azul-zetha); background: var(--azul-50); }
+.derivar-avatar { width: 26px; height: 30px; flex: none; }
+.derivar-flecha { margin-left: auto; color: var(--azul-zetha); font-size: 16px; }
+
+/* Chips */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--nube-200); background: #fff;
+  border-radius: 100px; padding: 7px 13px;
+  font: inherit; font-size: 12.5px; color: var(--gris-600);
+  cursor: pointer; transition: all .12s; text-align: left;
+}
+.chip:hover { border-color: var(--azul-zetha); color: var(--azul-zetha); background: var(--azul-50); }
+.chip-ora:hover { border-color: var(--navy-estructura); color: var(--navy-estructura); }
+
+/* Tarjetas de plantilla (Nodo) */
 .opcion {
   background: #fff; border: 1px solid var(--nube-200);
   border-radius: var(--radio); padding: 14px; text-align: left;
@@ -409,6 +480,14 @@ body {
   width: 42px; font-size: 17px; cursor: pointer;
 }
 
+/* Tarjetas de entrada del dashboard */
+.tarjeta-agente { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.tarjeta-agente.tema-nodo { background: linear-gradient(180deg, var(--azul-50), #fff 62%); }
+.tarjeta-agente.tema-ora  { background: linear-gradient(180deg, var(--nube-200), #fff 62%); }
+.agente-mini { width: 58px; height: 68px; }
+.acciones-agente { display: flex; gap: 14px; flex-wrap: wrap; }
+.eyebrow-sec { margin-top: 18px; margin-bottom: 8px; }
+
 /* ---------------------------------------------------------------------
    Responsive
    --------------------------------------------------------------------- */
@@ -420,9 +499,10 @@ body {
 @media (max-width: 780px) {
   body { grid-template-columns: 1fr; }
   .sidebar { position: static; height: auto; }
-  .contenido { padding: 20px 16px 90px; }
+  .contenido { padding: 20px 16px 110px; }
   .metricas { grid-template-columns: repeat(2, 1fr); }
   .panel { right: 12px; left: 12px; bottom: 12px; width: auto; }
+  .dock { right: 12px; bottom: 12px; }
 }
 
 /* La tabla nunca desborda la pagina: scrollea dentro de su tarjeta. */
